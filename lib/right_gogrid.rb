@@ -263,6 +263,27 @@ module Rightscale #:nodoc:
       on_exception
     end
 
+    # http://wiki.gogrid.com/wiki/index.php/API:grid.server.add
+    def add_sandbox(name, image, ip, description='' )
+      do_request("grid/server/add", { "v" => "1.2", 
+                                      :name  => name,
+                                      :image => image,
+                                      :ip    => ip,
+                                      :description => description,
+                                      :isSandbox => "true" } )
+    rescue
+      on_exception
+    end
+
+    # http://wiki.gogrid.com/wiki/index.php/API:grid.image.save
+    def image_save(server, friendly_name, description ="")
+      do_request("grid/image/save", { "v" => "1.2", 
+                                      :server  => server,
+                                      :friendlyName => friendly_name,
+                                      :description => description} )
+    rescue
+      on_exception
+    end
 
     # GoGrid API: http://wiki.gogrid.com/wiki/index.php/API:grid.server.delete
     #
