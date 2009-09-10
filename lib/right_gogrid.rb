@@ -94,8 +94,11 @@ module Rightscale #:nodoc:
     #
     #  This method is cached.
     #
-    def list_images
-      request_hash = generate_request("grid/image/list")
+    def list_images is_public = true
+      opts = {}
+      opts["v"] = "1.2"
+      opts["isPublic"] = is_public
+      request_hash = generate_request("grid/image/list", opts)
       request_cache_or_info(:list_images, request_hash, GogridJsonParser)
     rescue
       on_exception
@@ -166,9 +169,11 @@ module Rightscale #:nodoc:
     #
     #  This method is cached (unless server_type defined).
     #
-    def list_servers(server_type=nil)
+    def list_servers(server_type=nil, isSandbox=nil)
       opts = {}
       opts["server.type"] = server_type if server_type
+      opts["v"] = "1.2"
+      opts["isSandbox"] = isSandbox if isSandbox
       request_hash = generate_request("grid/server/list", opts)
       request_cache_or_info(:list_servers, request_hash, GogridJsonParser, !server_type)
     rescue
@@ -470,6 +475,7 @@ module Rightscale #:nodoc:
       opts = {}
       opts["ip.state"] = state if state
       opts["ip.type"]  = type  if type
+      opts["v"] = "1.1"
       request_hash = generate_request("grid/ip/list", opts)
       request_cache_or_info(:list_ips, request_hash, GogridJsonParser, !(state || type))
     rescue
